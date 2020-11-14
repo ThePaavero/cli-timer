@@ -78,9 +78,7 @@ const listenToInput = () => {
   })
 }
 
-const init = () => {
-  loadData()
-  
+const processArguments = () => {
   if (!processIgnoreArguments && process.argv[2] && process.argv[2].includes(':')) {
     const inputBits = process.argv[2].split(':')
     const inputToMomentObject = moment()
@@ -91,9 +89,16 @@ const init = () => {
     console.log(`Set latest event time to ${latestDateObject.hours()}:${latestDateObject.minutes()}`.bgWhite.black)
     processIgnoreArguments = true
     setTimeout(init, 2000)
+    return true
+  }
+  return false
+}
+
+const init = () => {
+  loadData()
+  if (processArguments()) {
     return
   }
-  
   listenToInput()
   tick()
 }
