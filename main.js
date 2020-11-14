@@ -1,43 +1,54 @@
 const CFonts = require('cfonts')
 const fs = require('fs')
+const moment = require('moment')
 const stdin = process.openStdin()
 
 const dbPath = __dirname + '/data.json'
+const colors = [
+  '#eb3434',
+  '#eb3434'
+]
 let data = []
+let outputString = '---'
+let latestDateObject = {}
 
 const loadData = () => {
   // Create our data file if it doesn't exist yet.
   if (!fs.existsSync(dbPath)) {
     fs.writeFileSync(dbPath, JSON.stringify([]))
   }
+  // Populate our model.
   data = JSON.parse(fs.readFileSync(dbPath).toString())
 }
 
 const tick = () => {
   console.clear()
-  render()
+  render(outputString)
   setTimeout(tick, 1000)
 }
 
 const render = (data) => {
-  CFonts.say('03:12', {
-    font: 'huge',              // define the font face
-    align: 'left',              // define text alignment
-    colors: ['system'],         // define all colors
-    background: 'transparent',  // define the background color, you can also use `backgroundColor` here as key
-    letterSpacing: 1,           // define letter spacing
-    lineHeight: 1,              // define the line height
-    space: true,                // define if the output text should have empty lines on top and on the bottom
-    maxLength: '0',             // define how many character can be on one line
-    gradient: false,            // define your two gradient colors
-    independentGradient: false, // define if you want to recalculate the gradient for each new line
-    transitionGradient: false,  // define if this is a transition between colors directly
-    env: 'node'                 // define the environment CFonts is being executed in
+  CFonts.say(data, {
+    font: 'huge',
+    align: 'left',
+    colors,
+    background: 'transparent',
+    letterSpacing: 1,
+    lineHeight: 1,
+    space: true,
+    maxLength: '0',
+    gradient: false,
+    independentGradient: false,
+    transitionGradient: false,
+    env: 'node'
   })
 }
 
 const addEvent = (input) => {
   fs.appendFileSync('debug.txt', input.toString() + '\n')
+  latestDateObject = moment()
+  data.push(latestDateObject)
+  fs.writeFileSync(dbPath, JSON.stringify(data))
 }
 
 const listenToInput = () => {
