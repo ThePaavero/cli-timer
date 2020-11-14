@@ -7,6 +7,7 @@ const stdin = process.openStdin()
 const dbPath = __dirname + '/data.json'
 const color = '#71bf98'
 
+let processIgnoreArguments = false
 let data = []
 let outputString = '---'
 let latestDateObject = null
@@ -63,19 +64,30 @@ const leftPad = (number) => {
   return number < 10 ? '0' + number.toString() : number
 }
 
-const addEvent = (input) => {
-  latestDateObject = moment()
+const addEvent = (momentObject = null) => {
+  latestDateObject = momentObject ? momentObject : moment()
   data.push(latestDateObject)
   fs.writeFileSync(dbPath, JSON.stringify(data))
 }
 
 const listenToInput = () => {
   stdin.addListener('data', (d) => {
-    addEvent(d.toString())
+    addEvent()
   })
 }
 
 const init = () => {
+  if (!processIgnoreArguments && process.argv[2] && process.argv[2].includes(':')) {
+    const inputBits = process.argv[2].split(':')
+    const inputToMomentObject = moment()
+    inputToMomentObject.hours(Number(inputBits[0]))
+    inputToMomentObject.minutes(Number(inputBits[1]))
+    addEvent(inputToMomentObject)
+    console.log(`Set latest event time to ${latestDateObject.hours()}:${latestDateObject.minutes()}`)
+    processIgnoreArguments = true
+    setTimeout(init, 5000)
+    return
+  }
   loadData()
   listenToInput()
   tick()
