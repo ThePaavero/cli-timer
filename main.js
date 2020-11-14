@@ -46,7 +46,7 @@ const render = () => {
 
   CFonts.say(outputString, {
     font: 'huge',
-    align: 'center',
+    align: 'left',
     colors: [color, color],
     background: 'transparent',
     letterSpacing: 2,
@@ -59,7 +59,7 @@ const render = () => {
     env: 'node'
   })
 
-  console.log('Press ENTER to reset.'.gray)
+  console.log('Press ENTER to reset.'.bgGray.white + ' (CTRL + C to quit)'.gray)
 }
 
 const leftPad = (number) => {
