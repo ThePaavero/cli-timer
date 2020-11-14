@@ -6,6 +6,8 @@ const stdin = process.openStdin()
 
 const dbPath = __dirname + '/data.json'
 const color = '#71bf98'
+const tickInterval = 'minutes'
+// const tickInterval = 'seconds'
 
 let processIgnoreArguments = false
 let data = []
@@ -23,7 +25,7 @@ const loadData = () => {
 const tick = () => {
   console.clear()
   render()
-  setTimeout(tick, 1000)
+  setTimeout(tick, tickInterval === 'seconds' ? 1000 : 60000) // 60000 = 1 minute.
 }
 
 const render = () => {
@@ -40,7 +42,7 @@ const render = () => {
   const minutes = duration.minutes()
   const seconds = duration.seconds()
 
-  outputString = `${leftPad(hours)}:${leftPad(minutes)}:${leftPad(seconds)}`
+  outputString = `${leftPad(hours)}:${leftPad(minutes)}${tickInterval === 'seconds' ? ':' + leftPad(seconds) : ''}`
 
   CFonts.say(outputString, {
     font: 'huge',
@@ -83,9 +85,10 @@ const init = () => {
     inputToMomentObject.hours(Number(inputBits[0]))
     inputToMomentObject.minutes(Number(inputBits[1]))
     addEvent(inputToMomentObject)
-    console.log(`Set latest event time to ${latestDateObject.hours()}:${latestDateObject.minutes()}`)
+    console.clear()
+    console.log(`Set latest event time to ${latestDateObject.hours()}:${latestDateObject.minutes()}`.bgWhite.black)
     processIgnoreArguments = true
-    setTimeout(init, 5000)
+    setTimeout(init, 2000)
     return
   }
   loadData()
