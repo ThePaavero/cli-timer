@@ -16,7 +16,7 @@ let latestDateObject = null
 
 const loadData = () => {
   if (!fs.existsSync(dbPath)) {
-    fs.writeFileSync(dbPath, JSON.stringify([]))
+    fs.writeFileSync(dbPath, JSON.stringify([moment()]))
   }
   data = JSON.parse(fs.readFileSync(dbPath).toString())
   latestDateObject = moment(data[data.length - 1])
@@ -79,6 +79,8 @@ const listenToInput = () => {
 }
 
 const init = () => {
+  loadData()
+  
   if (!processIgnoreArguments && process.argv[2] && process.argv[2].includes(':')) {
     const inputBits = process.argv[2].split(':')
     const inputToMomentObject = moment()
@@ -91,7 +93,7 @@ const init = () => {
     setTimeout(init, 2000)
     return
   }
-  loadData()
+  
   listenToInput()
   tick()
 }
