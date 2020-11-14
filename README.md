@@ -15,3 +15,6 @@
 * [moment](https://github.com/moment/moment/)
 * [cfonts](https://github.com/dominikwilkowski/cfonts)
 * [colors](https://github.com/Marak/colors.js)
+
+## Notes
+* We keep adding event timestamps to a JSON file. Why? Some plans for using the data for some kind of history graph or something. Need to implement some rotation logic so we don't end up with a huge file/array.
