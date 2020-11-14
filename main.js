@@ -8,6 +8,7 @@ const dbPath = __dirname + '/data.json'
 const color = '#71bf98'
 const tickInterval = 'minutes'
 // const tickInterval = 'seconds'
+// @todo Make this dynamic via arguments?
 
 let processIgnoreArguments = false
 let data = []
