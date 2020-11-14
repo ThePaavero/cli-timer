@@ -8,3 +8,10 @@
 ## Run
 * Normal case: `node main.js`
 * Manually override the latest event: `node main.js 19:25`
+
+---
+
+## Packages used
+* [moment](https://github.com/moment/moment/)
+* [cfonts](https://github.com/dominikwilkowski/cfonts)
+* [colors](https://github.com/Marak/colors.js)
