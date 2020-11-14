@@ -1,37 +1,50 @@
 const CFonts = require('cfonts')
 const fs = require('fs')
 const moment = require('moment')
+const colors = require('colors')
 const stdin = process.openStdin()
 
 const dbPath = __dirname + '/data.json'
-const colors = [
-  '#eb3434',
-  '#eb3434'
-]
+const color = '#eb3434'
+
 let data = []
 let outputString = '---'
-let latestDateObject = {}
+let latestDateObject = null
 
 const loadData = () => {
-  // Create our data file if it doesn't exist yet.
   if (!fs.existsSync(dbPath)) {
     fs.writeFileSync(dbPath, JSON.stringify([]))
   }
-  // Populate our model.
   data = JSON.parse(fs.readFileSync(dbPath).toString())
+  latestDateObject = moment(data[data.length - 1])
 }
 
 const tick = () => {
   console.clear()
-  render(outputString)
+  render()
   setTimeout(tick, 1000)
 }
 
-const render = (data) => {
-  CFonts.say(data, {
+const render = () => {
+
+  if (!latestDateObject.format) {
+    console.log('NO DATA'.red)
+    console.log(JSON.stringify(latestDateObject, null, 2))
+    return
+  }
+  console.log('Latest: ' + latestDateObject.format('HH:mm')) + '\n'
+
+  const duration = moment.duration(moment().diff(latestDateObject))
+  const hours = duration.hours()
+  const minutes = duration.minutes()
+  const seconds = duration.seconds()
+
+  outputString = `${hours}:${minutes}:${seconds}`
+
+  CFonts.say(outputString, {
     font: 'huge',
     align: 'left',
-    colors,
+    colors: [color, color],
     background: 'transparent',
     letterSpacing: 1,
     lineHeight: 1,
@@ -45,10 +58,10 @@ const render = (data) => {
 }
 
 const addEvent = (input) => {
-  fs.appendFileSync('debug.txt', input.toString() + '\n')
   latestDateObject = moment()
   data.push(latestDateObject)
   fs.writeFileSync(dbPath, JSON.stringify(data))
+  // @todo send to server?
 }
 
 const listenToInput = () => {
@@ -58,6 +71,7 @@ const listenToInput = () => {
 }
 
 const init = () => {
+  loadData()
   listenToInput()
   tick()
 }

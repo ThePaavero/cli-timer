@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "cfonts": "^2.8.6",
+    "colors": "^1.4.0",
     "moment": "^2.29.1"
   }
 }
