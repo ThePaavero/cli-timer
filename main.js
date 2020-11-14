@@ -12,7 +12,7 @@ const tickInterval = 'minutes'
 
 let processIgnoreArguments = false
 let data = []
-let outputString = '---'
+let outputString = ''
 let latestDateObject = null
 
 const loadData = () => {
