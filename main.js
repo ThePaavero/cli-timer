@@ -39,7 +39,7 @@ const render = () => {
   const minutes = duration.minutes()
   const seconds = duration.seconds()
 
-  outputString = `${hours}:${minutes}:${seconds}`
+  outputString = `${leftPad(hours)}:${leftPad(minutes)}:${leftPad(seconds)}`
 
   CFonts.say(outputString, {
     font: 'huge',
@@ -57,11 +57,14 @@ const render = () => {
   })
 }
 
+const leftPad = (number) => {
+  return number < 10 ? '0' + number.toString() : number
+}
+
 const addEvent = (input) => {
   latestDateObject = moment()
   data.push(latestDateObject)
   fs.writeFileSync(dbPath, JSON.stringify(data))
-  // @todo send to server?
 }
 
 const listenToInput = () => {
