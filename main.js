@@ -70,6 +70,7 @@ const addEvent = (momentObject = null) => {
   latestDateObject = momentObject ? momentObject : moment()
   data.push(latestDateObject)
   fs.writeFileSync(dbPath, JSON.stringify(data))
+  tick()
 }
 
 const listenToInput = () => {
