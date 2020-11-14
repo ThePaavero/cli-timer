@@ -5,7 +5,7 @@ const colors = require('colors')
 const stdin = process.openStdin()
 
 const dbPath = __dirname + '/data.json'
-const color = '#eb3434'
+const color = '#71bf98'
 
 let data = []
 let outputString = '---'
@@ -43,7 +43,7 @@ const render = () => {
 
   CFonts.say(outputString, {
     font: 'huge',
-    align: 'left',
+    align: 'center',
     colors: [color, color],
     background: 'transparent',
     letterSpacing: 1,
@@ -55,6 +55,8 @@ const render = () => {
     transitionGradient: false,
     env: 'node'
   })
+
+  console.log('Press ENTER to reset.'.gray)
 }
 
 const leftPad = (number) => {
