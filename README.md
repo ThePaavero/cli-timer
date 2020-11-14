@@ -1,4 +1,5 @@
 # CLI Timer
+![Screenshot](https://raw.githubusercontent.com/ThePaavero/cli-timer/master/screenshot.gif)
 
 ## Install
 * `npm i`
