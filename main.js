@@ -35,7 +35,7 @@ const render = () => {
     console.log(JSON.stringify(latestDateObject, null, 2))
     return
   }
-  console.log('Latest: ' + latestDateObject.format('HH:mm')) + '\n'
+  console.log('Latest reset: ' + latestDateObject.format('HH:mm')) + '\n'
 
   const duration = moment.duration(moment().diff(latestDateObject))
   const hours = duration.hours()
@@ -49,7 +49,7 @@ const render = () => {
     align: 'center',
     colors: [color, color],
     background: 'transparent',
-    letterSpacing: 1,
+    letterSpacing: 2,
     lineHeight: 1,
     space: true,
     maxLength: '0',
