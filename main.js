@@ -10,6 +10,7 @@ const tickInterval = 'minutes'
 // const tickInterval = 'seconds'
 // @todo Make this dynamic via arguments?
 
+let tickerId = null
 let processIgnoreArguments = false
 let data = []
 let outputString = ''
@@ -24,9 +25,12 @@ const loadData = () => {
 }
 
 const tick = () => {
+  if (tickerId) {
+    clearTimeout(tickerId)
+  }
   console.clear()
   render()
-  setTimeout(tick, tickInterval === 'seconds' ? 1000 : 60000) // 60000 = 1 minute.
+  tickerId = setTimeout(tick, tickInterval === 'seconds' ? 1000 : 60000) // 60000 = 1 minute.
 }
 
 const render = () => {
