@@ -2,7 +2,9 @@ const CFonts = require('cfonts')
 const fs = require('fs')
 const moment = require('moment')
 const colors = require('colors')
+const axios = require('axios')
 const stdin = process.openStdin()
+const env = require('./env.json')
 
 const dbPath = __dirname + '/data.json'
 const color = '#71bf98'
@@ -71,10 +73,27 @@ const leftPad = (number) => {
   return number < 10 ? '0' + number.toString() : number
 }
 
+const syncToServer = (latestDateObject) => {
+  const latestTimeString = `${moment(latestDateObject).get('hour')}:${moment(latestDateObject).get('minute')}`
+  const url = env.remoteUrl
+  axios.post(url, {
+    dateString: latestTimeString,
+  }, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    }
+  }).then(response => {
+    fs.appendFileSync('server-logs.txt', 'SUCCESS: ' + response.data + '\n')
+  }).catch(error => {
+    fs.appendFileSync('server-logs.txt', 'ERROR: ' + JSON.stringify(response) + '\n')
+  })
+}
+
 const addEvent = (momentObject = null) => {
   latestDateObject = momentObject ? momentObject : moment()
   data.push(latestDateObject)
   fs.writeFileSync(dbPath, JSON.stringify(data))
+  syncToServer(latestDateObject)
   tick()
 }
 

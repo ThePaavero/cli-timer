@@ -2,3 +2,5 @@ node_modules
 debug.txt
 data.json
 .vscode
+server-logs.txt
+env.json
