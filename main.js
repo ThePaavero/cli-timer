@@ -8,6 +8,7 @@ const env = require('./env.json')
 
 const dbPath = __dirname + '/data.json'
 const color = '#71bf98'
+const colorClock = '#c0c0c0'
 const tickInterval = 'minutes'
 // const tickInterval = 'seconds'
 // @todo Make this dynamic via arguments?
@@ -33,6 +34,10 @@ const tick = () => {
   console.clear()
   render()
   tickerId = setTimeout(tick, tickInterval === 'seconds' ? 1000 : 60000) // 60000 = 1 minute.
+}
+
+const getClockString = () => {
+  return moment().format('HH:mm')
 }
 
 const render = () => {
@@ -67,6 +72,22 @@ const render = () => {
   })
 
   console.log('Press ENTER to reset.'.bgGray.white + ' (CTRL + C to quit)'.gray)
+  console.log('\nCurrent time:'.gray)
+
+  CFonts.say(getClockString(), {
+    font: 'huge',
+    align: 'left',
+    colors: [colorClock, colorClock],
+    background: 'transparent',
+    letterSpacing: 2,
+    lineHeight: 1,
+    space: true,
+    maxLength: '0',
+    gradient: false,
+    independentGradient: false,
+    transitionGradient: false,
+    env: 'node'
+  })
 }
 
 const leftPad = (number) => {
