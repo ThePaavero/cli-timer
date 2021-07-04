@@ -72,22 +72,24 @@ const render = () => {
   })
 
   console.log('Press ENTER to reset.'.bgGray.white + ' (CTRL + C to quit)'.gray)
-  console.log('\nCurrent time:'.gray)
 
-  CFonts.say(getClockString(), {
-    font: 'huge',
-    align: 'left',
-    colors: [colorClock, colorClock],
-    background: 'transparent',
-    letterSpacing: 2,
-    lineHeight: 1,
-    space: true,
-    maxLength: '0',
-    gradient: false,
-    independentGradient: false,
-    transitionGradient: false,
-    env: 'node'
-  })
+  if (env.showClock) {
+    console.log('\nCurrent time:'.gray)
+    CFonts.say(getClockString(), {
+      font: 'huge',
+      align: 'left',
+      colors: [colorClock, colorClock],
+      background: 'transparent',
+      letterSpacing: 2,
+      lineHeight: 1,
+      space: true,
+      maxLength: '0',
+      gradient: false,
+      independentGradient: false,
+      transitionGradient: false,
+      env: 'node'
+    })
+  }
 }
 
 const leftPad = (number) => {
@@ -114,7 +116,9 @@ const addEvent = (momentObject = null) => {
   latestDateObject = momentObject ? momentObject : moment()
   data.push(latestDateObject)
   fs.writeFileSync(dbPath, JSON.stringify(data))
-  syncToServer(latestDateObject)
+  if (env.remoteUrl) {
+    syncToServer(latestDateObject)
+  }
   tick()
 }
 
