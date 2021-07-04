@@ -83,7 +83,7 @@ const syncToServer = (latestDateObject) => {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     }
   }).then(response => {
-    fs.appendFileSync('server-logs.txt', 'SUCCESS: ' + response.data + '\n')
+    // fs.appendFileSync('server-logs.txt', 'SUCCESS: ' + response.data + '\n')
   }).catch(error => {
     fs.appendFileSync('server-logs.txt', 'ERROR: ' + JSON.stringify(response) + '\n')
   })
