@@ -74,7 +74,7 @@ const render = () => {
   console.log('Press ENTER to reset.'.bgGray.white + ' (CTRL + C to quit)'.gray)
 
   if (env.showClock) {
-    console.log('\nCurrent time:'.gray)
+    console.log('\nToday is '.gray + moment().format('dddd').white + '. Current time: '.gray)
     CFonts.say(getClockString(), {
       font: 'huge',
       align: 'left',
