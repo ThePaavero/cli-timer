@@ -41,7 +41,6 @@ const getClockString = () => {
 }
 
 const render = () => {
-
   if (!latestDateObject.format) {
     console.log('NO DATA'.red)
     console.log(JSON.stringify(latestDateObject, null, 2))
@@ -68,7 +67,7 @@ const render = () => {
     gradient: false,
     independentGradient: false,
     transitionGradient: false,
-    env: 'node'
+    env: 'node',
   })
 
   console.log('Press ENTER to reset.'.bgGray.white + ' (CTRL + C to quit)'.gray)
@@ -87,7 +86,7 @@ const render = () => {
       gradient: false,
       independentGradient: false,
       transitionGradient: false,
-      env: 'node'
+      env: 'node',
     })
   }
 }
@@ -99,17 +98,24 @@ const leftPad = (number) => {
 const syncToServer = (latestDateObject) => {
   const latestTimeString = `${moment(latestDateObject).get('hour')}:${moment(latestDateObject).get('minute')}`
   const url = env.remoteUrl
-  axios.post(url, {
-    dateString: latestTimeString,
-  }, {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    }
-  }).then(response => {
-    // fs.appendFileSync('server-logs.txt', 'SUCCESS: ' + response.data + '\n')
-  }).catch(error => {
-    fs.appendFileSync('server-logs.txt', 'ERROR: ' + JSON.stringify(response) + '\n')
-  })
+  axios
+    .post(
+      url,
+      {
+        dateString: latestTimeString,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+      }
+    )
+    .then((response) => {
+      // fs.appendFileSync('server-logs.txt', 'SUCCESS: ' + response.data + '\n')
+    })
+    .catch((error) => {
+      fs.appendFileSync('server-logs.txt', 'ERROR: ' + JSON.stringify(response) + '\n')
+    })
 }
 
 const addEvent = (momentObject = null) => {
