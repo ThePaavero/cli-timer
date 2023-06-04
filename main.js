@@ -18,6 +18,7 @@ let processIgnoreArguments = false
 let data = []
 let outputString = ''
 let latestDateObject = null
+let latestDateObjects = []
 
 const loadData = () => {
   if (!fs.existsSync(dbPath)) {
@@ -25,13 +26,18 @@ const loadData = () => {
   }
   data = JSON.parse(fs.readFileSync(dbPath).toString())
   latestDateObject = moment(data[data.length - 1])
+  let historyRenderCount = env.historyCount
+
+  while (historyRenderCount--) {
+    latestDateObjects.push(data[data.length - historyRenderCount])
+  }
 }
 
 const tick = () => {
   if (tickerId) {
     clearTimeout(tickerId)
   }
-  console.clear()
+  // console.clear()
   render()
   tickerId = setTimeout(tick, tickInterval === 'seconds' ? 1000 : 60000) // 60000 = 1 minute.
 }
@@ -41,12 +47,13 @@ const getClockString = () => {
 }
 
 const render = () => {
-  if (!latestDateObject.format) {
-    console.log('NO DATA'.red)
-    console.log(JSON.stringify(latestDateObject, null, 2))
-    return
-  }
-  console.log('Latest reset: ' + latestDateObject.format('HH:mm')) + '\n'
+  console.log(
+    `Latest resets: ${latestDateObjects
+      .map((i) => {
+        return moment(i).format('HH:mm')
+      })
+      .join(', ')}\n`
+  )
 
   const duration = moment.duration(moment().diff(latestDateObject))
   const hours = duration.hours()
@@ -118,9 +125,15 @@ const syncToServer = (latestDateObject) => {
     })
 }
 
+const updateHistoryStack = (latest) => {
+  latestDateObjects.push(latestDateObject)
+}
+
 const addEvent = (momentObject = null) => {
   latestDateObject = momentObject ? momentObject : moment()
   data.push(latestDateObject)
+  updateHistoryStack(latestDateObject)
+
   fs.writeFileSync(dbPath, JSON.stringify(data))
   if (env.remoteUrl) {
     syncToServer(latestDateObject)
@@ -141,7 +154,7 @@ const processArguments = () => {
     inputToMomentObject.hours(Number(inputBits[0]))
     inputToMomentObject.minutes(Number(inputBits[1]))
     addEvent(inputToMomentObject)
-    console.clear()
+    // console.clear()
     console.log(`Set latest event time to ${latestDateObject.hours()}:${latestDateObject.minutes()}`.bgWhite.black)
     processIgnoreArguments = true
     setTimeout(init, 2000)
