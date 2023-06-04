@@ -51,7 +51,9 @@ const render = () => {
     `Latest resets: ${latestDateObjects
       .filter((latestDateObject) => latestDateObject !== undefined)
       .map((i) => {
-        return moment(i).format('HH:mm')
+        const isLast = i === latestDateObjects[latestDateObjects.length - 2] // ¬_¬
+        let str = `${moment(i).format('HH:mm').toString()}`
+        return isLast ? str.white : str.gray
       })
       .join(', ')}`
   )
