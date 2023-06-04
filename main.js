@@ -83,7 +83,7 @@ const render = () => {
   console.log('Press ENTER to reset.'.bgGray.white + ' (CTRL + C to quit)'.gray)
 
   if (env.showClock) {
-    console.log('\nToday is '.gray + moment().format('dddd').white + '. Current time: '.gray)
+    console.log('\nToday is '.gray + moment().format('dddd D.M.y').white + '. Current time: '.gray)
     CFonts.say(getClockString(), {
       font: 'huge',
       align: 'left',
@@ -121,10 +121,15 @@ const syncToServer = (latestDateObject) => {
       }
     )
     .then((response) => {
-      // fs.appendFileSync('server-logs.txt', 'SUCCESS: ' + response.data + '\n')
+      fs.appendFileSync(
+        'server-logs.txt',
+        `Wrote successful log item (Server response http status was "${
+          response.status
+        }", time was ${latestTimeString}") at ${moment().toLocaleString()}\n`
+      )
     })
     .catch((error) => {
-      fs.appendFileSync('server-logs.txt', 'ERROR: ' + JSON.stringify(response) + '\n')
+      fs.appendFileSync('server-logs.txt', 'ERROR: ' + JSON.stringify(response.data.error) + '\n')
     })
 }
 
