@@ -26,7 +26,7 @@ const loadData = () => {
   }
   data = JSON.parse(fs.readFileSync(dbPath).toString())
   latestDateObject = moment(data[data.length - 1])
-  let historyRenderCount = env.historyCount
+  let historyRenderCount = env.historyCount + 1 // ¬_¬
 
   while (historyRenderCount--) {
     latestDateObjects.push(data[data.length - historyRenderCount])
@@ -37,7 +37,7 @@ const tick = () => {
   if (tickerId) {
     clearTimeout(tickerId)
   }
-  // console.clear()
+  console.clear()
   render()
   tickerId = setTimeout(tick, tickInterval === 'seconds' ? 1000 : 60000) // 60000 = 1 minute.
 }
@@ -49,10 +49,11 @@ const getClockString = () => {
 const render = () => {
   console.log(
     `Latest resets: ${latestDateObjects
+      .filter((latestDateObject) => latestDateObject !== undefined)
       .map((i) => {
         return moment(i).format('HH:mm')
       })
-      .join(', ')}\n`
+      .join(', ')}`
   )
 
   const duration = moment.duration(moment().diff(latestDateObject))
@@ -154,7 +155,7 @@ const processArguments = () => {
     inputToMomentObject.hours(Number(inputBits[0]))
     inputToMomentObject.minutes(Number(inputBits[1]))
     addEvent(inputToMomentObject)
-    // console.clear()
+    console.clear()
     console.log(`Set latest event time to ${latestDateObject.hours()}:${latestDateObject.minutes()}`.bgWhite.black)
     processIgnoreArguments = true
     setTimeout(init, 2000)
