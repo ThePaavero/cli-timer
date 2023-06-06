@@ -50,6 +50,7 @@ const render = () => {
   console.log(
     `Latest resets: ${latestDateObjects
       .filter((latestDateObject) => latestDateObject !== undefined)
+      .slice(env.historyCount * -1)
       .map((i) => {
         const isLast = i === latestDateObjects[latestDateObjects.length - 2] // ¬_¬
         let str = `${moment(i).format('HH:mm').toString()}`
@@ -134,7 +135,7 @@ const syncToServer = (latestDateObject) => {
 }
 
 const updateHistoryStack = (latest) => {
-  latestDateObjects.push(latestDateObject)
+  latestDateObjects.push(latest)
 }
 
 const addEvent = (momentObject = null) => {
